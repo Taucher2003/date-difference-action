@@ -1,0 +1,26 @@
+name: "Timespans - Readme"
+author: Niklas van Schrick
+description: "Add a automatically updating timespans in your Readme"
+
+inputs:
+  GITHUB_TOKEN:
+    description: "GitHub access token with Repo scope"
+    required: true
+    default: ${{ github.token }}
+  REPOSITORY:
+    description: "Your GitHub repository"
+    default: ${{ github.repository }}
+    required: false
+
+  COMMIT_MESSAGE:
+    description: "Add a commit message of your choice"
+    default: "Updated Timespans"
+    required: false
+
+runs:
+  using: "docker"
+  image: "Dockerfile"
+
+branding:
+  icon: "info"
+  color: "blue"
