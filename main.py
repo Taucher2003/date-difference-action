@@ -126,6 +126,10 @@
 #  Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
 #
 #
+#
+#  Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
+#
+#
 import re
 import os
 import base64
@@ -149,12 +153,8 @@ def generate_readme_content(old_content: str) -> str:
     content = old_content
     matches = re.findall(REGEX, old_content)
     for match in matches:
-        print("match: " + str(match))
-        print("match[0]: " + match[0])
         replaced = replace(match[0])
-        print("replaced: "+ replaced)
         content = content.replace(match[0], replaced, 1)
-        print("content: " + content)
 
     return content
 
@@ -162,7 +162,6 @@ def generate_readme_content(old_content: str) -> str:
 def replace(input: str) -> str:
     reg = re.match(REGEX, input)
     format = reg.group("format")
-    print("groups: "+str(reg.groups()))
     if reg.group("date") is not None:
         result = calculate(format, reg.group("date"), input, reg)
 
@@ -175,37 +174,32 @@ def replace(input: str) -> str:
 def calculate(format: str, date_str: str, full_string: str, reg: re) -> str:
     result = format
     date = datetime.strptime(date_str, "%Y-%m-%d")
-    print("format: " + format)
 
     if format.__contains__('%y'):
         result = re.sub('%y', str(calculate_years(date, datetime.now())), result)
 
     if format.__contains__('%m'):
-        result = re.sub('%m', str(calculate_months(date, datetime.now(), format.__contains__('%y'))), result)
+        result = re.sub('%m', str(calculate_months(date, datetime.now(), not format.__contains__('%y'))), result)
 
     if format.__contains__('%d'):
-        days = str(calculate_days(date, datetime.now(), format.__contains__('%y'), format.__contains__('%m')))
+        days = str(calculate_days(date, datetime.now(), not format.__contains__('%y'), not format.__contains__('%m')))
         print("days: " + days)
         result = re.sub('%d', days, result)
 
-    print("result: "+result)
-    print("full_string: " + full_string)
     if full_string.__contains__('env:'):
         target_day = 'env:' + reg.group('id')
     else:
         target_day = reg.group('date')
     final_result = "<!--timespan:start(" + reg.group('format') + ")(" + target_day + ")-->" + result + "<!--timespan:end-->"
-    print(final_result)
     # return re.sub(reg.group('replace'), result, full_string)
     return final_result
 
 
 def calculate_days(start: datetime, end: datetime, years: bool, months: bool) -> int:
-    print("start: " + str(start))
-    print("end: " + str(end))
     delta = relativedelta(end, start)
     result = delta.days
     print("delta.days: " + str(result))
+    print("delta.leapdays: " + str(delta.leapdays))
     if years:
         """TODO"""
         result = result
@@ -244,9 +238,7 @@ if __name__ == '__main__':
         sys.exit(1)
     contents = repo.get_readme()
     readme_content = decode_readme(contents.content)
-    print("readme_content: "+readme_content)
     replaced_content = generate_readme_content(readme_content)
-    print("replaced_content: "+replaced_content)
     if replaced_content != readme_content:
         repo.update_file(path=contents.path, message=commit_message,
                          content=replaced_content, sha=contents.sha)
