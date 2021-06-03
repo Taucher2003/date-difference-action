@@ -70,6 +70,10 @@
 #  Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
 #
 #
+#
+#  Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
+#
+#
 import re
 import os
 import base64
@@ -104,16 +108,16 @@ def replace(input: str) -> str:
     reg = re.match(REGEX, input)
     format = reg.group("format")
     if reg.groups().__contains__("date"):
-        result = calculate(format, reg.group("date"))
+        result = calculate(format, reg.group("date"), input)
 
     else:
-        result = calculate(format, os.getenv(reg.group("id")))
+        result = calculate(format, os.getenv(reg.group("id")), input)
 
     return result
 
 
-def calculate(format: str, date_str: str) -> str:
-    result = format
+def calculate(format: str, date_str: str, full_string: str) -> str:
+    result = full_string
     date = datetime.strptime(date_str, "%Y-%m-%d")
 
     if format.__contains__('%y'):
@@ -126,6 +130,7 @@ def calculate(format: str, date_str: str) -> str:
         days = str(calculate_days(date, datetime.now(), format.__contains__('%y'), format.__contains__('%m')))
         print("days: " + days)
         result = re.sub('%d', days, result)
+        print("result: "+result)
 
     return result
 
