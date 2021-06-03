@@ -106,6 +106,10 @@
 #  Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
 #
 #
+#
+#  Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
+#
+#
 import re
 import os
 import base64
@@ -166,6 +170,7 @@ def calculate(format: str, date_str: str, full_string: str, reg: re) -> str:
         result = re.sub('%d', days, result)
 
     print("result: "+result)
+    print("full_string: " + full_string)
     if full_string.__contains__('env:'):
         target_day = 'env:' + reg.group('env')
     else:
