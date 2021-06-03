@@ -90,6 +90,10 @@
 #  Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
 #
 #
+#
+#  Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
+#
+#
 import re
 import os
 import base64
@@ -102,7 +106,7 @@ REGEX = r'(?P<full>(<!--timespan:start' \
         r'\((?P<format>[%a-zA-Z.\/\\\\]+)\)' \
         r'((\((?P<date>[0-9]{4}[- /.](0[1-9]|1[0-2])[- /.](0[1-9]|[12][0-9]|3[01]))\))' \
         r'|(\(env:(?P<id>[0-9]+)\)))' \
-        r'-->[0-9]*<!--timespan:end-->))'
+        r'-->(?P<replace>[0-9]*)<!--timespan:end-->))'
 
 repository = os.getenv('INPUT_REPOSITORY')
 github_token = os.getenv('INPUT_GITHUB_TOKEN')
@@ -125,16 +129,16 @@ def replace(input: str) -> str:
     format = reg.group("format")
     print("groups: "+str(reg.groups()))
     if reg.group("date") is not None:
-        result = calculate(format, reg.group("date"), input)
+        result = calculate(format, reg.group("date"), input, reg)
 
     else:
-        result = calculate(format, os.getenv(reg.group("id")), input)
+        result = calculate(format, os.getenv(reg.group("id")), input, reg)
 
     return result
 
 
-def calculate(format: str, date_str: str, full_string: str) -> str:
-    result = full_string
+def calculate(format: str, date_str: str, full_string: str, reg: re) -> str:
+    result = format
     date = datetime.strptime(date_str, "%Y-%m-%d")
 
     if format.__contains__('%y'):
@@ -149,7 +153,7 @@ def calculate(format: str, date_str: str, full_string: str) -> str:
         result = re.sub('%d', days, result)
         print("result: "+result)
 
-    return result
+    return re.sub(reg.group('replace'), result, full_string)
 
 
 def calculate_days(start: datetime, end: datetime, years: bool, months: bool) -> int:
