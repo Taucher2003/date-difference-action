@@ -42,6 +42,10 @@
 #  Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
 #
 #
+#
+#  Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
+#
+#
 import re
 import os
 import base64
@@ -67,7 +71,7 @@ def generate_readme_content(old_content: str) -> str:
     for match in matches:
         print(match)
         print(str(match))
-        re.sub(match, replace(match), content)
+        re.sub(match[0], replace(match[0]), content)
 
     return content
 
