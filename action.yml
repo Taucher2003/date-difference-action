@@ -1,6 +1,6 @@
 name: "Timespans - Readme"
 author: Niklas van Schrick
-description: "Add a automatically updating timespans in your Readme"
+description: "Add automatically updating timespans in your Readme"
 
 inputs:
   GITHUB_TOKEN:
