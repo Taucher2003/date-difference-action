@@ -1,6 +1,6 @@
 certifi==2021.5.30
 chardet==4.0.0
-Deprecated==1.2.12
+Deprecated==1.2.13
 idna==3.2
 PyGithub==1.55
 PyJWT==2.1.0
