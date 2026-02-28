@@ -1,9 +1,9 @@
 # Date Difference Action
 
 Date Difference Action calculates the differences between a given date and today.
-As example, this project has been finished <!--timespan:start(%d)(2021-06-04)-->1729<!--timespan:end--> days ago.
+As example, this project has been finished <!--timespan:start(%d)(2021-06-04)-->1730<!--timespan:end--> days ago.
 
-You can add these dynamic timespans with `<!--timespan:start(%d)(2021-06-04)-->1729<!--timespan:end-->`.
+You can add these dynamic timespans with `<!--timespan:start(%d)(2021-06-04)-->1730<!--timespan:end-->`.
 
 | Comment Part         | Explanation                       |
 |----------------------|-----------------------------------|
@@ -39,7 +39,7 @@ jobs:
 The parameters `COMMIT_MESSAGE`, `REPOSITORY` and `GITHUB_TOKEN` are optional.
 
 If you don't want to expose the exact date, you can use environment variables to set the date.
-With that, you will use `<!--timespan:start(%d)(env:1)-->1729<!--timespan:end-->` in the README, and the following action setup
+With that, you will use `<!--timespan:start(%d)(env:1)-->1730<!--timespan:end-->` in the README, and the following action setup
 <details>
 <summary>Action with environment</summary>
 
